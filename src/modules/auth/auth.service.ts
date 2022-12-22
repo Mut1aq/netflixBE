@@ -38,10 +38,6 @@ export class AuthService {
     const payload: Payload = {
       fullName: user.fullName,
       sub: user._id,
-      addedMovies: user.addedMovies,
-      watchedMovies: user.watchedMovies,
-      ratedMovies: user.ratedMovies,
-      reviews: user.reviews,
     };
 
     const token = this.jwtService.sign(payload, {

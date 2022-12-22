@@ -32,10 +32,15 @@ export type I18nTranslations = {
         };
     };
     "movie": {
-        "errors": {};
+        "errors": {
+            "watchList": string;
+            "updateDelete": string;
+        };
         "success": {
             "create": string;
             "review": string;
+            "addToWatchList": string;
+            "delete": string;
         };
     };
     "shared": {

@@ -9,6 +9,7 @@ import {
   UseGuards,
   Query,
   Req,
+  Put,
 } from '@nestjs/common';
 import { MovieService } from './movie.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
@@ -24,6 +25,7 @@ import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import mongoose from 'mongoose';
 import { FilterDto } from 'src/shared/dtos/filter.dto';
 import { CreateReviewDto } from './dto/create-review.dto';
+import { MongoDBIDPipe } from 'src/shared/pipes/mongo-id.pipe';
 
 @ApiTags('movie')
 @ApiBearerAuth('JWT-auth')
@@ -50,7 +52,8 @@ export class MovieController {
   @Post(':movieID/review')
   createReview(
     @Body() createReviewDto: CreateReviewDto,
-    @Param('movieID') movieID: mongoose.Schema.Types.ObjectId,
+    @Param('movieID', new MongoDBIDPipe())
+    movieID: mongoose.Schema.Types.ObjectId,
     @Req() req,
   ) {
     return this.movieService.createReview(
@@ -70,17 +73,37 @@ export class MovieController {
   @ApiOkResponse({ description: 'Return a movie by ID' })
   @ApiNoContentResponse({ description: 'no movie in the database' })
   @Get(':movieID')
-  findOne(@Param('movieID') movieID: mongoose.Schema.Types.ObjectId) {
+  findOne(
+    @Param('movieID', new MongoDBIDPipe())
+    movieID: mongoose.Schema.Types.ObjectId,
+  ) {
     return this.movieService.findOne(movieID);
   }
 
   @Patch(':movieID/watch')
-  addToWatchList(@Param('movieID') movieID: mongoose.Schema.Types.ObjectId) {
-    return this.movieService.addToWatchList(movieID);
+  addToWatchList(
+    @Param('movieID', new MongoDBIDPipe())
+    movieID: mongoose.Schema.Types.ObjectId,
+    @Req() req,
+  ) {
+    return this.movieService.addToWatchList(movieID, req.user.sub);
+  }
+
+  @Put(':movieID')
+  update(
+    @Param('movieID', new MongoDBIDPipe())
+    movieID: mongoose.Schema.Types.ObjectId,
+    @Body() updateMovieDto: UpdateMovieDto,
+    @Req() req,
+  ) {
+    return this.movieService.update(movieID, updateMovieDto, req.user.sub);
   }
 
   @Delete(':movieID')
-  remove(@Param('movieID') movieID: mongoose.Schema.Types.ObjectId) {
-    return this.movieService.remove(movieID);
+  remove(
+    @Param('movieID') movieID: mongoose.Schema.Types.ObjectId,
+    @Req() req,
+  ) {
+    return this.movieService.remove(movieID, req.user.sub);
   }
 }
