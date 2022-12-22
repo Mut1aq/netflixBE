@@ -1,0 +1,26 @@
+{
+  "errors": {
+    "error": "حدث خطاء"
+  },
+  "success": {
+    "success": "تمت العملية بنجاح"
+  },
+  "dtos": {
+    "property": {
+      "fullName": "الاسم الكامل",
+      "age": "العمر",
+      "email": "الايميل",
+      "password": "كلمة السر"
+    },
+    "constraint": {
+      "uppercase": "حرف كبير",
+      "lowercase": "حرف صغير",
+      "number": "رقم",
+      "specialCharacter": "رمز"
+    }
+  },
+  "entities": {
+    "movie": "الفلم",
+    "user": "المستخدم"
+  }
+}

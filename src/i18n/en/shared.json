@@ -1,0 +1,26 @@
+{
+  "errors": {
+    "error": "Something Went Wrong"
+  },
+  "success": {
+    "success": "Success"
+  },
+  "dtos": {
+    "property": {
+      "fullName": "Full Name",
+      "age": "Age",
+      "email": "Email",
+      "password": "Password"
+    },
+    "constraint": {
+      "uppercase": "An Uppercase Letter",
+      "lowercase": "A Lowercase Letter",
+      "number": "A Number",
+      "specialCharacter": "A Special Character"
+    }
+  },
+  "entities": {
+    "movie": "Movie",
+    "user": "User"
+  }
+}
