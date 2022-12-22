@@ -1,5 +1,9 @@
 import { Controller, Post, Body, Request, UseGuards } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
+import {
+  ApiBadRequestResponse,
+  ApiCreatedResponse,
+  ApiTags,
+} from '@nestjs/swagger';
 import { LocalAuthGuard } from 'src/guards/local-auth.guard';
 import { Public } from 'src/shared/decorators/auth/public.decorator';
 import { CreateUserDto } from '../user/dto/create-user.dto';
@@ -11,6 +15,11 @@ import { LoginDto } from './dto/login.dto';
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
+  @ApiCreatedResponse({
+    status: 201,
+    description: 'The User has been successfully created, and can login now',
+  })
+  @ApiBadRequestResponse({ status: 400, description: 'If Email Exists.' })
   @Public()
   @Post('register')
   register(@Body() userCreateDto: CreateUserDto) {

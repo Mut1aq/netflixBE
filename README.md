@@ -15,17 +15,19 @@ Requirements:
 ○ Age
 ○ Email (no need to confirm email)
 ○ Password
+
 ● Login:
 ○ Email
 ○ Password
+
 ● Add movie:
 ○ Name
 ○ Description
 ○ Date
 ○ Cover
 ● Edit/Delete movie (user can edit/delete movies he’ve created only)
-● Get Movie info (rate is calculated by the sum of rates divided by the number
-of raters).
+
+● Get Movie info (rate is calculated by the sum of rates divided by the number of raters).
 ● List Movies:
 ○ Filters:
 ■ Sort by date

@@ -18,10 +18,7 @@ import { ServerLogger } from 'src/services/logger/server-logger';
 export class CustomExceptionInterceptor
   implements ExceptionFilter, NestInterceptor
 {
-  constructor(
-    private readonly i18n: I18nService,
-    private readonly logger: ServerLogger,
-  ) {}
+  constructor(private i18n: I18nService, private logger: ServerLogger) {}
   async catch(exception: HttpException, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
@@ -34,7 +31,7 @@ export class CustomExceptionInterceptor
 
     this.logger.APIlog(
       request.originalUrl,
-      'CustomExceptionInterceptor',
+      'Exception Interceptor',
       request,
       status,
       exception.message,
@@ -54,7 +51,7 @@ export class CustomExceptionInterceptor
     const response = context.switchToHttp().getResponse();
     this.logger.APIlog(
       request.originalUrl,
-      'CustomExceptionInterceptor - Request',
+      'Exception Interceptor - Request',
       request,
       42069, // ! Nice
     );
@@ -62,7 +59,7 @@ export class CustomExceptionInterceptor
       map(async (data) => {
         this.logger.APIlog(
           request.originalUrl,
-          'CustomExceptionInterceptor - Response',
+          'Exception Interceptor - Response',
           request,
           response.statusCode,
         );
@@ -77,7 +74,7 @@ export class CustomExceptionInterceptor
             customMessage = data.message ?? data.error;
             this.logger.APIlog(
               request.originalUrl,
-              'CustomExceptionInterceptor',
+              'Exception Interceptor',
               request,
               response.statusCode,
               customMessage,

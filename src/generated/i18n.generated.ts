@@ -28,11 +28,21 @@ export type I18nTranslations = {
                 "number": string;
                 "specialCharacter": string;
             };
+            "date": string;
+        };
+    };
+    "movie": {
+        "errors": {};
+        "success": {
+            "create": string;
+            "review": string;
         };
     };
     "shared": {
         "errors": {
             "error": string;
+            "user": string;
+            "movie": string;
         };
         "success": {
             "success": string;

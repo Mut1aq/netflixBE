@@ -7,7 +7,6 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { ReturnMessage } from 'src/shared/interfaces/return-message.interface';
-import { cleanObject } from 'src/shared/util/clean-object.util';
 import { Payload } from 'src/shared/interfaces/token-payload.interface';
 
 @Injectable()

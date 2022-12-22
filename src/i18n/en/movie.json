@@ -1,0 +1,7 @@
+{
+  "errors": {},
+  "success": {
+    "create": "Movie has been created successfully",
+    "review": "Movie has been successfully reviewed"
+  }
+}

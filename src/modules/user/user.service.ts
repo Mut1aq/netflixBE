@@ -1,9 +1,8 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import mongoose, { Model } from 'mongoose';
+import { emptyDocument } from 'src/shared/db-error-handling/empty-document.middleware';
 import { cleanObject } from 'src/shared/util/clean-object.util';
-import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
 import { UserDocument, User } from './entities/user.entity';
 
 @Injectable()
@@ -19,6 +18,12 @@ export class UserService {
       );
 
     cleanObject(user);
+    return user;
+  }
+
+  async findOneByID(userID: mongoose.Schema.Types.ObjectId): Promise<User> {
+    const user = await this.userModel.findById(userID);
+    emptyDocument(user, 'user');
     return user;
   }
 }
