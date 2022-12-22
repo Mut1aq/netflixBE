@@ -57,6 +57,7 @@ export class CreateUserDto {
   email: string;
 
   //*******************************************/
+
   @ApiProperty({
     description: 'User password when registering',
     example: 'GreaTPassWord123',
@@ -96,6 +97,7 @@ export class CreateUserDto {
   password: string;
 
   //*******************************************/
+
   @ApiProperty({
     description: 'Users age when registering',
     example: '18',
@@ -130,6 +132,7 @@ export class CreateUserDto {
   age: number;
 
   //*******************************************/
+
   @ApiProperty({
     description: 'Users Full name',
     example: 'Mutlaq Alsadeed',

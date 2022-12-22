@@ -1,6 +1,8 @@
 {
   "errors": {
-    "error": "Something Went Wrong"
+    "error": "Something Went Wrong",
+    "user": "User was not found",
+    "movie": "Movie was not found"
   },
   "success": {
     "success": "Success"

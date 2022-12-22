@@ -4,8 +4,4 @@ import { Review } from './review.interface';
 export interface Payload {
   fullName: string;
   sub: string;
-  addedMovies: Movie[];
-  watchedMovies: Movie[];
-  ratedMovies: Movie[];
-  reviews: Review[];
 }

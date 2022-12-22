@@ -7,7 +7,6 @@ import { UserService } from '../user/user.service';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../user/dto/create-user.dto';
 import { ReturnMessage } from 'src/shared/interfaces/return-message.interface';
-import { cleanObject } from 'src/shared/util/clean-object.util';
 import { Payload } from 'src/shared/interfaces/token-payload.interface';
 
 @Injectable()
@@ -39,10 +38,6 @@ export class AuthService {
     const payload: Payload = {
       fullName: user.fullName,
       sub: user._id,
-      addedMovies: user.addedMovies,
-      watchedMovies: user.watchedMovies,
-      ratedMovies: user.ratedMovies,
-      reviews: user.reviews,
     };
 
     const token = this.jwtService.sign(payload, {

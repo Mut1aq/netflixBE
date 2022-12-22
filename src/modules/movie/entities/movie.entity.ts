@@ -22,7 +22,7 @@ export class Movie extends Basic {
     type: String,
     required: [true, 'Description must be provided'],
     minlength: [1, 'Description must be at least 10 character'],
-    maxlength: [100, 'Description must be less than 2200 characters'],
+    maxlength: [2200, 'Description must be less than 2200 characters'],
   })
   description: string;
 
@@ -52,5 +52,11 @@ export class Movie extends Basic {
     type: [{ reviewText: String, rate: Number }],
   })
   reviews: Review[];
+
+  @Prop({
+    type: Number,
+    default: 0,
+  })
+  rate: number;
 }
 export const MovieSchema = SchemaFactory.createForClass(Movie);
