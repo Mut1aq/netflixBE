@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { emptyDocument } from 'src/shared/db-error-handling/empty-document.middleware';
@@ -9,6 +9,7 @@ import {
   checkNullability,
 } from 'src/shared/util/check-nullability.util';
 import { cleanObject } from 'src/shared/util/clean-object.util';
+import { currentDate } from 'src/shared/util/date.util';
 import { UserService } from '../user/user.service';
 import { CreateMovieDto } from './dto/create-movie.dto';
 import { CreateReviewDto } from './dto/create-review.dto';
@@ -44,6 +45,12 @@ export class MovieService {
   ): Promise<ReturnMessage> {
     const user = await this.userService.findOneByID(userID);
     const movie = await this.findOne(movieID);
+    if (!user.watchedMovies.includes(movie._id)) {
+      throw new HttpException(
+        'movie.errors.watchList',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
     movie.reviews.push(createReviewDto);
     user.reviews.push({ ...createReviewDto, movieID: movie._id });
     user.ratedMovies.push(movie._id);
@@ -70,14 +77,14 @@ export class MovieService {
   }
 
   async findAll(query: FilterDto) {
-    const { skip, limit, orderByDate } = query;
+    const { skip, limit, orderByDate, orderByRate } = query;
 
-    const orderByDateFilter = !checkNullability(orderByDate)
-      ? { _id: orderByDate === 'asc' ? 1 : -1 }
+    const orderByDateFilter = checkNullability(orderByDate)
+      ? { _id: orderByDate }
       : ({} as any);
 
-    const orderByRateFilter = !checkNullability(orderByDate)
-      ? { rate: orderByDate === 'asc' ? 1 : -1 }
+    const orderByRateFilter = checkNullability(orderByRate)
+      ? { rate: orderByRate }
       : ({} as any);
 
     const movies = await this.movieModel
@@ -98,11 +105,62 @@ export class MovieService {
     return movie;
   }
 
-  addToWatchList(movieID: mongoose.Schema.Types.ObjectId) {
-    return `This action updates a #${movieID} movie`;
+  async addToWatchList(
+    movieID: mongoose.Schema.Types.ObjectId,
+    userID: mongoose.Schema.Types.ObjectId,
+  ): Promise<ReturnMessage> {
+    const user = await this.userService.findOneByID(userID);
+    const movie = await this.findOne(movieID);
+    user.watchedMovies.push(movie._id);
+    movie.watchedBy.push(user._id);
+
+    await user.save();
+    await movie.save();
+    return {
+      message: 'movie.success.addToWatchList',
+      statusCode: 201,
+    };
   }
 
-  remove(movieID: mongoose.Schema.Types.ObjectId) {
-    return `This action removes a #${movieID} movie`;
+  async update(
+    movieID: mongoose.Schema.Types.ObjectId,
+    updateMovieDto: UpdateMovieDto,
+    userID: mongoose.Schema.Types.ObjectId,
+  ): Promise<Movie> {
+    const user = await this.userService.findOneByID(userID);
+    let movie = await this.movieModel.findByIdAndUpdate(
+      movieID,
+      updateMovieDto,
+    );
+    emptyDocument(movie, 'movie');
+    if (!user.addedMovies.includes(movie._id)) {
+      throw new HttpException(
+        'movie.errors.updateDelete',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    movie.updateDate = currentDate;
+    movie.isNew = false;
+    await movie.save();
+    return movie;
+  }
+
+  async remove(
+    movieID: mongoose.Schema.Types.ObjectId,
+    userID: mongoose.Schema.Types.ObjectId,
+  ): Promise<ReturnMessage> {
+    const user = await this.userService.findOneByID(userID);
+    if (!user.addedMovies.includes(movieID as unknown as Movie)) {
+      throw new HttpException(
+        'movie.errors.updateDelete',
+        HttpStatus.UNAUTHORIZED,
+      );
+    }
+    const movie = await this.movieModel.findByIdAndRemove(movieID).exec();
+    emptyDocument(movie, 'movie');
+    return {
+      message: '',
+      statusCode: 201,
+    };
   }
 }

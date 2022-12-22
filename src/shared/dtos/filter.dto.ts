@@ -1,5 +1,5 @@
 import { Type } from 'class-transformer';
-import { IsInt, IsOptional, IsString, Min } from 'class-validator';
+import { IsIn, IsInt, IsOptional, IsString, Min } from 'class-validator';
 
 export class FilterDto {
   @IsOptional()
@@ -16,9 +16,11 @@ export class FilterDto {
 
   @IsOptional()
   @IsString()
+  @IsIn(['asc', 'desc'])
   orderByDate: string;
 
   @IsOptional()
   @IsString()
+  @IsIn(['asc', 'desc'])
   orderByRate: string;
 }

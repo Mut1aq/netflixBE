@@ -1,7 +1,12 @@
 {
-  "errors": {},
+  "errors": {
+    "watchList": "Movie must be in the watch list in order to be reviewed",
+    "updateDelete": "You can't update/delete this movie"
+  },
   "success": {
     "create": "Movie has been created successfully",
-    "review": "Movie has been successfully reviewed"
+    "review": "Movie has been successfully reviewed",
+    "addToWatchList": "Movie has been added to the watch list",
+    "delete": "Movie has been successfully deleted"
   }
 }
